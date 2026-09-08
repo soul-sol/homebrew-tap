@@ -7,9 +7,10 @@ brew install agent-watch
 
 ## agent-watch
 
-Tells `DONE`, `FAILED` and `STALL` apart when a coding agent exits. A worker that stops to ask for
-approval exits cleanly and leaves a log that reads like success; this checks the recorded exit code
-*and* a completion marker, and treats a missing marker as a stall rather than a pass.
+Tells `DONE`, `FAILED` and `STALL` apart using the recorded exit code and result-body failure signals.
+Read the result body before accepting `DONE`: an approval-only response can exit cleanly without doing
+the work. Completion markers are supplementary diagnostics; their absence alone is never `STALL`.
+`STALL` is reserved for unavailable or invalid evidence such as a PID record, log, or exit code.
 
 ```
 agent-launch build ./logs -- codex exec "implement X"

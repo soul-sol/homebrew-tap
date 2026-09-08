@@ -1,5 +1,5 @@
 class AgentWatch < Formula
-  desc "Tell DONE, FAILED and STALL apart when a coding agent exits"
+  desc "Check agent exit codes and result bodies; markers are diagnostic"
   homepage "https://github.com/soul-sol/agent-watch"
   url "https://github.com/soul-sol/agent-watch/archive/refs/tags/v1.tar.gz"
   sha256 "ec7d89b85599a1daeb115a5c212e484077b2c811f70f5fbebeb5374941dcb86c"
@@ -17,12 +17,15 @@ class AgentWatch < Formula
     exitf = testpath/"done.exit"
     log.write "work\ntokens used\n1,234\n"
     exitf.write "0\n"
-    # A finished run with a zero exit code and a completion marker must be DONE.
+    # A zero exit code returns a completion candidate; the marker is diagnostic only.
     assert_match "DONE", shell_output("#{bin}/agent-watch w 999999 #{log} codex #{exitf}")
 
-    stall = testpath/"stall.log"
-    stall.write "work\nplease approve this plan\n"
-    # No marker means the process stopped without finishing; the gate must not pass it.
-    assert_match "STALL", shell_output("#{bin}/agent-watch w 999999 #{stall} codex #{exitf}", 2)
+    markerless = testpath/"markerless.log"
+    markerless.write "Implemented requested fix; verification passed.\n"
+    # A missing marker is not STALL; read the result body before accepting DONE.
+    assert_match "DONE", shell_output("#{bin}/agent-watch w 999999 #{markerless} codex #{exitf}")
+
+    # STALL requires unavailable evidence, here a missing exit-code record.
+    assert_match "STALL", shell_output("#{bin}/agent-watch w 999999 #{markerless} codex #{testpath}/missing.exit", 2)
   end
 end
