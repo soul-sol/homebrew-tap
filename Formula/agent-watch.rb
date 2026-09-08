@@ -1,8 +1,8 @@
 class AgentWatch < Formula
   desc "Check agent exit codes and result bodies; markers are diagnostic"
   homepage "https://github.com/soul-sol/agent-watch"
-  url "https://github.com/soul-sol/agent-watch/archive/refs/tags/v1.tar.gz"
-  sha256 "ec7d89b85599a1daeb115a5c212e484077b2c811f70f5fbebeb5374941dcb86c"
+  url "https://github.com/soul-sol/agent-watch/archive/refs/tags/v1.1.0.tar.gz"
+  sha256 "fdc8af8b82a463036170a8bb6f4ea2d0832f547e7a2395263a70ecdeea074688"
   license "MIT"
 
   def install
