@@ -2,6 +2,7 @@
 
 ```
 brew tap soul-sol/tap
+brew trust soul-sol/tap   # Homebrew refuses third-party taps until you trust them
 brew install agent-watch
 ```
 
